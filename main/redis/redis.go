@@ -10,7 +10,7 @@ import (
 var Redis redigo.Redigo
 
 func main() {
-	Redis = redigo.NewRedisPool("127.0.0.1:6379", "", 100, 100, 200)
+	Redis = redigo.NewRedisPool("127.0.0.1:6379", "", 10, 100, 100, 200)
 	if Redis.TestConn() != nil {
 		log.Fatal("redis_err", "Redis connect failed!")
 	}

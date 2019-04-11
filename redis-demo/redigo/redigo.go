@@ -11,13 +11,13 @@ type Redigo struct {
 	pool *redis.Pool
 }
 
-func NewRedisPool(host, password string, maxIdle, maxActive int, idleTimeout time.Duration) Redigo {
+func NewRedisPool(host, password string, dbNum int, maxIdle, maxActive int, idleTimeout time.Duration) Redigo {
 	redisConn := &redis.Pool{
 		MaxIdle:     maxIdle,
 		MaxActive:   maxActive,
 		IdleTimeout: idleTimeout,
 		Dial: func() (conn redis.Conn, e error) {
-			return newRedisPoolFunction(host, password)
+			return newRedisPoolFunction(host, password, dbNum)
 		},
 		TestOnBorrow: testOnBorrowFunction,
 	}
@@ -40,7 +40,7 @@ func testOnBorrowFunction(c redis.Conn, t time.Time) error {
 	return err
 }
 
-func newRedisPoolFunction(host, password string) (redis.Conn, error) {
+func newRedisPoolFunction(host, password string, dbNum int) (redis.Conn, error) {
 	c, err := redis.Dial("tcp", host)
 	if err != nil {
 		return nil, err
@@ -52,6 +52,11 @@ func newRedisPoolFunction(host, password string) (redis.Conn, error) {
 				return nil, err
 			}
 		}
+	}
+	_, err = c.Do("SELECT", dbNum)
+	if err != nil {
+		var _ = c.Close()
+		return nil, err
 	}
 	return c, err
 }
