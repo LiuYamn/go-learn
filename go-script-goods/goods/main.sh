@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 go build createGoodsJson.go
-./createGoodsJson --filename /Users/liuyiyuan/Downloads/s2.xlsx  --sheet 新sku列表
+./createGoodsJson --filename /Users/liuyiyuan/Downloads/s3.xlsx  --sheet 新sku列表
