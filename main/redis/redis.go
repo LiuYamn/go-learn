@@ -10,9 +10,14 @@ import (
 var Redis redigo.Redigo
 
 func main() {
-	Redis = redigo.NewRedisPool("127.0.0.1:6379", "", 10, 100, 100, 200)
+	Redis = redigo.NewRedisPool("127.0.0.1:6379", "", 0, 100, 100, 200)
 	if Redis.TestConn() != nil {
 		log.Fatal("redis_err", "Redis connect failed!")
 	}
 	time.Sleep(time.Second * 3)
+
+	da := "asdasdsadasd"
+
+	Redis.Set("aaa", da, -1)
+
 }

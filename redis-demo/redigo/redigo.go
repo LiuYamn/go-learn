@@ -1,7 +1,6 @@
 package redigo
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -63,11 +62,7 @@ func newRedisPoolFunction(host, password string, dbNum int) (redis.Conn, error) 
 
 func (r *Redigo) Set(key string, data interface{}, time int) error {
 	conn := r.pool.Get()
-	value, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-	_, err = conn.Do("SET", key, value)
+	_, err := conn.Do("SET", key, data)
 	if err != nil {
 		return err
 	}
